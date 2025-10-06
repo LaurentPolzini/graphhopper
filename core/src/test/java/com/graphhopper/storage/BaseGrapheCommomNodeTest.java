@@ -30,11 +30,23 @@ public class BaseGrapheCommomNodeTest extends AbstractGraphStorageTester {
      * test pour getCommonNode avec deux edge qui ont un common node
      */
     @Test
-    public void testCommonNodeTrue() {
+    public void testCommonNodeTrue1() {
         BaseGraph graph = createGHStorage();
-        EdgeIteratorState edge1 = graph.edge(0, 1);  // Edge 0→1
-        EdgeIteratorState edge2 = graph.edge(edge1.getBaseNode(), 2);  // Edge 1→2
+        EdgeIteratorState edge1 = graph.edge(0, 1);  // Edge 0->1
+        EdgeIteratorState edge2 = graph.edge(edge1.getBaseNode(), 2);  // Edge 1->2
         assertEquals(0, (getCommonNode(graph, edge1.getEdge(), edge2.getEdge())));
+
+    }
+
+    /**
+     * test pour getCommonNode avec deux edge qui ont un common node
+     */
+    @Test
+    public void testCommonNodeTrue2() {
+        BaseGraph graph = createGHStorage();
+        EdgeIteratorState edge1 = graph.edge(0, 1);  // Edge 0->1
+        EdgeIteratorState edge2 = graph.edge(2, edge1.getAdjNode());  // Edge 2->1
+        assertEquals(1, (getCommonNode(graph, edge1.getEdge(), edge2.getEdge())));
 
     }
 
