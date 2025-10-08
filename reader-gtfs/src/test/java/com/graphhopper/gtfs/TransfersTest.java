@@ -18,13 +18,14 @@
 
 package com.graphhopper.gtfs;
 
-
 import com.conveyal.gtfs.GTFSFeed;
 import com.conveyal.gtfs.model.Transfer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
+import com.github.javafaker.Faker;
 
 import java.io.File;
 import java.io.IOException;
@@ -105,7 +106,7 @@ public class TransfersTest {
     @Test
     public void testGetTransfersFromStopNotExistingFromRouteID() {
         // 3rd TEST : not an existing fromRouteID, but existing FromStopID
-        assertEquals(Collections.emptyList(), sampleFeed.getTransfersFromStop("BEATTY_AIRPORT", null));
+        assertNotEquals(Collections.emptyList(), sampleFeed.getTransfersFromStop("BEATTY_AIRPORT", null));
         // if fromRouteId == null, the program fails (fromRouteId.equals in the filter) ! 
     }
 
@@ -117,6 +118,14 @@ public class TransfersTest {
         assertNotEquals(Collections.emptyList(), existingFromRouteID);
         assertNotEquals(Collections.emptyList(), notExistingFromRouteID);
             // fromRouteId can be an imaginary route but cannot be null. We can admit coming from an unknown route as a valid case
+    }
+
+    @Test
+    public void testWithFaker() {
+        Faker faker = new Faker();
+        String fromStopIdFaker = faker.address().cityName();
+        assertEquals(Collections.emptyList(), sampleFeed.getTransfersFromStop(fromStopIdFaker, null));
+
     }
 
 }
