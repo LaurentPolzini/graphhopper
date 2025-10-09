@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DistanceCalc3DTest {
 
-    /*
+    /**
+     * testCalcDistWithSamePoint
      * Test pour verifier que la distance est nulle sans deplacement
      */
     @Test
@@ -16,7 +17,8 @@ public class DistanceCalc3DTest {
         assertEquals(0,dist, 0);
     }
 
-    /*
+    /**
+     * testCalcDistWithDiffLatitude
      * Test pour verifier que la distance est non nulle avec variation de latitude
      */
     @Test
@@ -26,7 +28,8 @@ public class DistanceCalc3DTest {
         assertNotEquals(0, dist, 0);
     }
 
-    /*
+    /**
+     * testCalcDistWithDiffLongitude
      * Test pour verifier que la distance est non nulle avec variation de longitude
      */
     @Test
@@ -36,7 +39,8 @@ public class DistanceCalc3DTest {
         assertNotEquals(0, dist, 0);
     }
 
-    /*
+    /**
+     * testCalcDistWithDiffAltitudePositive
      * Test pour verifier que la distance est non nulle avec variation de l'altitude
      */
     @Test
@@ -47,7 +51,8 @@ public class DistanceCalc3DTest {
     }
 
 
-    /*
+    /**
+     * testCalcDistWithDiffAltitude
      * Test pour verifier que s'il y a juste une variation de l'altitude
      * la distance est egale a l'altitude
      */
@@ -58,8 +63,9 @@ public class DistanceCalc3DTest {
         assertEquals(1000, dist, 0);
     }
 
-    /*
-     * Test que la distance 3D est toujours > distance 2D avec altitude
+    /**
+     * test3DDistanceGreaterthan2D
+     * Test pour verifier que la distance 3D est toujours > distance 2D avec altitude
      */
     @Test
     public void test3DDistanceGreaterthan2D() {
@@ -69,7 +75,8 @@ public class DistanceCalc3DTest {
         assertTrue(dist3D > dist2D);
     }
 
-    /*
+    /**
+     * test3DDistanceEquals2D
      * Test que la distance 3D (Sans altitude) = 2D
      */
     @Test
@@ -80,12 +87,12 @@ public class DistanceCalc3DTest {
         assertEquals(dist3D, dist2D);
     }
 
-    /*
+    /**
+     * testCalcDistWithDiffAltitudeLongDistance
      * Verifie que pour de longues distance l'altitude n'a pas d'impact sur la distance
      * (les hauteurs faibles sont negligeables) -- (voir le javaDoc de de DistanceCalc3D)
      * le pourcentage d'erreur choisie est de 5% de l'altitude
      * donc la distance de 3D est sensiblement egalale a la distance de 2D sans l'altitude
-     *
      */
     @Test
     public void testCalcDistWithDiffAltitudeLongDistance(){
@@ -96,9 +103,10 @@ public class DistanceCalc3DTest {
         assertEquals(distWithoutAltitude, distA, 0.05*altitude);
     }
 
-    /*
+    /**
+     * testCalcDistWithDiffAltitudeShortDistance
      * Test pour verifier la negation de l'enonce de la classe DistanceCalc3D
-     * Pour de courte distance l'altitude devrait avoir un impact sur la distance
+     * Pour de courte distance, l'altitude devrait avoir un impact sur la distance
      * par consequent la distance de 3D est differente de la distance de 2D avec l'altitude
      */
     @Test
