@@ -82,6 +82,7 @@ public class TransfersTest {
         assertEquals("ABBFC", transfersToStop.get(4).from_route_id);
     }
 
+    
     /// We here assure that the filter is working as expected, excluding transfer_type = 1.
     @Test
     public void testFiltersGetTransfersFromStop() {
@@ -108,6 +109,7 @@ public class TransfersTest {
         // 3rd TEST : not an existing fromRouteID, but existing FromStopID
         assertNotEquals(Collections.emptyList(), sampleFeed.getTransfersFromStop("BEATTY_AIRPORT", null));
         // if fromRouteId == null, the program fails (fromRouteId.equals in the filter) ! 
+        assertNotEquals(Collections.emptyList(), sampleFeed.getTransfersFromStop("BEATTY_AIRPORT", "titi"));
     }
 
     @Test
@@ -118,14 +120,39 @@ public class TransfersTest {
         assertNotEquals(Collections.emptyList(), existingFromRouteID);
         assertNotEquals(Collections.emptyList(), notExistingFromRouteID);
             // fromRouteId can be an imaginary route but cannot be null. We can admit coming from an unknown route as a valid case
+        assertNotEquals(existingFromRouteID, notExistingFromRouteID);
     }
 
     @Test
     public void testWithFaker() {
         Faker faker = new Faker();
-        String fromStopIdFaker = faker.address().cityName();
-        assertEquals(Collections.emptyList(), sampleFeed.getTransfersFromStop(fromStopIdFaker, null));
 
+        // arrange
+
+        // initialization of random values
+        String randomRouteId = faker.letterify("RANDOM_????");
+        String knownStopId = "BEATTY_AIRPORT";
+        Transfers transfers = sampleFeed;
+
+        // act
+
+        // real stop, random route.
+        List<Transfer> randomTransfers = transfers.getTransfersFromStop(knownStopId, randomRouteId);
+
+        // asserts
+
+        // as seen before, it should return a non-empty transfer list
+        assertNotEquals(Collections.emptyList(), randomTransfers);
+        
+        // every transfer came from the same stop.
+        assertTrue(randomTransfers.stream()
+            .allMatch(t -> knownStopId.equals(t.from_stop_id)),
+            "Every transfers must come from " + knownStopId);
+
+        // Just to know what was created.
+        System.out.println("Random route: " + randomRouteId);
+        System.out.println("Generated transfers: " + randomTransfers.size());
     }
-
+    
 }
+ 
