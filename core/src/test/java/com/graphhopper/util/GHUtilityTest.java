@@ -170,13 +170,13 @@ public class GHUtilityTest {
 
 
     /**
-     * insertCircularEdge
+     * TestCircularEdge
      * Vérifie que l’insertion d’une arête circulaire (0->0) est interdite.
      * tentative d’ajout d’une arête de 0 vers 0.
      * IllegalArgumentException attendue car les arêtes circulaires sont invalides, getCommonNode retournera une exection.
      */
     @Test
-    public void insertCircularEdge() {
+    public void TestCircularEdge() {
         BaseGraph graph = createGHStorage();
         EdgeIteratorState edge2 = graph.edge(0, 1);  // Edge 1-2
         assertThrows(IllegalArgumentException.class, () -> getCommonNode(graph, graph.edge(0, 0).getEdge(), edge2.getEdge()));
@@ -185,13 +185,13 @@ public class GHUtilityTest {
 
 
     /**
-     * insertEdgeThatFormACircle
+     * TestEdgeThatFormACircle
      * Vérifie que getCommonNode rejette les arêtes formant un cycle.
      * Données choisies : arêtes (0->1) et (1->0) forment un cycle.
      * IllegalArgumentException attendue car les cycles ne sont pas autorisés.
      */
     @Test
-    public void insertEdgeThatFormACircle() {
+    public void TestEdgeThatFormACircle() {
         BaseGraph graph = createGHStorage();
         EdgeIteratorState edge1 = graph.edge(0, 1);
         EdgeIteratorState edge2 = graph.edge(1, 0);
