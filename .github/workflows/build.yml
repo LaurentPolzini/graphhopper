@@ -46,6 +46,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: core-artefact
+        continue-on-error: true      # pour eviter l'erreur au premier run
 
       # workflow pour analyser le score du module core
       - name: Run pitest on core module
@@ -80,6 +81,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: reader-artefact
+        continue-on-error: true
 
         # workflow pour analyser le score du module reader-gtfs
       - name: Run pitest on reader-gtfs module
