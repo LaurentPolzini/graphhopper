@@ -41,11 +41,17 @@ jobs:
       - name: build tous les modules
         run: mvn clean install -DskipTests
 
-      # telecherge core-artefact
+      # telecherge core-artefact en utilisant la github action dawidd6/action-download-artifact@v11
       - name: Download core-artefact
-        uses: actions/download-artifact@v5
+        id: download-core-artifact
+        uses: dawidd6/action-download-artifact@v11
         with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          workflow_search: true
+          workflow_conclusion: success
           name: core-artefact-${{ matrix.java-version }}
+          path: core-artefact/
         continue-on-error: true      # pour eviter l'erreur au premier run
 
       # workflow pour analyser le score du module core
@@ -78,9 +84,15 @@ jobs:
 
       # telecherge readergtfs-artefact
       - name: Download reader-artefact
-        uses: actions/download-artifact@v5
+        id: download-reader-artifact
+        uses: dawidd6/action-download-artifact@v11
         with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          workflow_search: true
+          workflow_conclusion: success
           name: reader-artefact-${{ matrix.java-version }}
+          path: reader-artefact/
         continue-on-error: true
 
         # workflow pour analyser le score du module reader-gtfs
