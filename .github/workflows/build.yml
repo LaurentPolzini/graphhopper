@@ -45,7 +45,7 @@ jobs:
       - name: Download core-artefact
         uses: actions/download-artifact@v5
         with:
-          name: core-artefact
+          name: core-artefact-${{ matrix.java-version }}
         continue-on-error: true      # pour eviter l'erreur au premier run
 
       # workflow pour analyser le score du module core
@@ -72,7 +72,7 @@ jobs:
       - name: 'Upload preccedent core-score'
         uses: actions/upload-artifact@v4
         with:
-          name: core-artefact
+          name: core-artefact-${{ matrix.java-version }}
           path: ./Prec_Score
 
 
@@ -80,7 +80,7 @@ jobs:
       - name: Download reader-artefact
         uses: actions/download-artifact@v5
         with:
-          name: reader-artefact
+          name: reader-artefact-${{ matrix.java-version }}
         continue-on-error: true
 
         # workflow pour analyser le score du module reader-gtfs
@@ -107,7 +107,7 @@ jobs:
       - name: 'Upload preccedent reader-score'
         uses: actions/upload-artifact@v4
         with:
-          name: reader-artefact
+          name: reader-artefact-${{ matrix.java-version }}
           path: ./Prec_Score_gtfs
 
 
