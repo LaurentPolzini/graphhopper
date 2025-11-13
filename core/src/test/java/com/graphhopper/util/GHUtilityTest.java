@@ -189,6 +189,7 @@ public class GHUtilityTest {
      * Vérifie que getCommonNode rejette les arêtes formant un cycle.
      * Données choisies : arêtes (0->1) et (1->0) forment un cycle.
      * IllegalArgumentException attendue car les cycles ne sont pas autorisés.
+     * return
      */
     @Test
     public void TestEdgeThatFormACircle() {
