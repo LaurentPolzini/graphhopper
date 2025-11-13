@@ -37,6 +37,10 @@ jobs:
       - name: Build ${{ matrix.java-version }}
         run: mvn -B clean test
 
+      # build tous les modules
+      - name: build tous les modules
+        run: mvn clean install -DskipTests
+
       # workflow pour analyser le score du module core
       - name: Run pitest on core module
         run: |
