@@ -51,6 +51,7 @@ jobs:
       # workflow pour analyser le score du module core
       - name: Run pitest on core module
         run: |
+          mkdir -p core-artefact
           mvn test-compile -pl core org.pitest:pitest-maven:mutationCoverage | tee core/core-score
 
           Core_Score=$(grep -A15 Statistics core/core-score | grep Killed | grep -oP '\(\K[0-9]+')
@@ -86,6 +87,7 @@ jobs:
         # workflow pour analyser le score du module reader-gtfs
       - name: Run pitest on reader-gtfs module
         run: |
+          mkdir -p reader-artefact
           mvn test-compile -pl reader-gtfs org.pitest:pitest-maven:mutationCoverage | tee reader-gtfs/reader-score
 
           Reader_Score=$(grep -A15 Statistics reader-gtfs/reader-score | grep Killed | grep -oP '\(\K[0-9]+')
