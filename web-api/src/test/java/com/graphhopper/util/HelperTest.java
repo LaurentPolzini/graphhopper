@@ -175,5 +175,7 @@ public class HelperTest {
         assertEquals(145.635986, ele, 1.e-6);
         // ... but converting back to int should yield the same value we started with!
         assertEquals(storedInt, Helper.eleToUInt(ele));
+
+        assertNotEquals(storedInt, Helper.eleToUInt(ele));
     }
 }

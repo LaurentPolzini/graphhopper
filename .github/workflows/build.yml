@@ -123,4 +123,8 @@ jobs:
           name: reader-artefact-${{ matrix.java-version }}
           path: ./Prec_Score_gtfs
 
+      - name: RickRoll On Fail
+        if: failure()
+        run: echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
+
 
