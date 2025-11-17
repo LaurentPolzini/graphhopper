@@ -38,11 +38,15 @@ jobs:
         run: mvn -B clean test
         continue-on-error: true
 
+      - name: Rick Roll On Fail
+        if: failure()
+        run: echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
+
       # build tous les modules
       - name: build tous les modules
         run: mvn clean install -DskipTests
 
-      # telecherge core-artefact en utilisant la github action dawidd6/action-download-artifact@v11
+      # telecharge core-artefact en utilisant la github action dawidd6/action-download-artifact@v11
       - name: Download core-artefact
         id: download-core-artifact
         uses: dawidd6/action-download-artifact@v11
@@ -123,9 +127,5 @@ jobs:
         with:
           name: reader-artefact-${{ matrix.java-version }}
           path: ./Prec_Score_gtfs
-
-      - name: RickRoll On Fail
-        if: failure()
-        run: echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
 
 
