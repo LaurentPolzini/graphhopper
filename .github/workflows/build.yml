@@ -35,10 +35,17 @@ jobs:
           restore-keys: |
             ${{ runner.os}}-node_modules-
       - name: Build ${{ matrix.java-version }}
+        id: tests
         run: mvn -B clean test
         continue-on-error: true
 
-
+      - name: Rick Roll On Fail # on veut que tous les tests s'effectuent donc continue-on-error:
+        # mais si une erreur survient, if failure() n'est pas vrai car la tache precedente s'est finie
+        # on test plutot l'outcome
+        if: steps.tests.outcome == 'failure'
+        run: |
+            echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
+            cat .github/workflows/rickroll.txt
 
       # build tous les modules
       - name: build tous les modules
