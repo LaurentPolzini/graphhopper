@@ -171,16 +171,16 @@ class ArrayUtilTest {
         assertEquals(from(2, 3, 1, 0), from(ArrayUtil.invert(new int[]{3, 2, 0, 1})));
     }
 
-    //@Test
-    //public void testMerge() {
-       // assertArrayEquals(new int[]{}, ArrayUtil.merge(new int[]{}, new int[]{}));
-     //   assertArrayEquals(new int[]{4, 5}, ArrayUtil.merge(new int[]{}, new int[]{4, 5}));
-       // assertArrayEquals(new int[]{4, 5}, ArrayUtil.merge(new int[]{4, 5}, new int[]{}));
-   //     assertArrayEquals(new int[]{3, 6, 9}, ArrayUtil.merge(new int[]{6, 6, 6, 9}, new int[]{3, 9}));
-     //   int[] a = {2, 6, 8, 12, 15};
-        //int[] b = {3, 7, 9, 10, 11, 12, 15, 20, 21, 26};
-      //  assertEquals(from(2, 3, 6, 7, 8, 9, 10, 11, 12, 15, 20, 21, 26), from(ArrayUtil.merge(a, b)));
-    //}
+    @Test
+    public void testMerge() {
+        assertArrayEquals(new int[]{}, ArrayUtil.merge(new int[]{}, new int[]{}));
+        assertArrayEquals(new int[]{4, 5}, ArrayUtil.merge(new int[]{}, new int[]{4, 5}));
+        assertArrayEquals(new int[]{4, 5}, ArrayUtil.merge(new int[]{4, 5}, new int[]{}));
+        assertArrayEquals(new int[]{3, 6, 9}, ArrayUtil.merge(new int[]{6, 6, 6, 9}, new int[]{3, 9}));
+        int[] a = {2, 6, 8, 12, 15};
+        int[] b = {3, 7, 9, 10, 11, 12, 15, 20, 21, 26};
+        assertEquals(from(2, 3, 6, 7, 8, 9, 10, 11, 12, 15, 20, 21, 26), from(ArrayUtil.merge(a, b)));
+    }
 
 
 
