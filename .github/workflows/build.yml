@@ -41,7 +41,7 @@ jobs:
         if: failure()
         run: |
             echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
-            cat rickroll.txt
+            cat .github/workflows/rickroll.txt
 
       # build tous les modules
       - name: build tous les modules
