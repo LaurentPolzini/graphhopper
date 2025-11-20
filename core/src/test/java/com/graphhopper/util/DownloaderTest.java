@@ -40,6 +40,5 @@ public class DownloaderTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

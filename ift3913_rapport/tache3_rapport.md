@@ -42,6 +42,78 @@ Il ne faut pas non plus oublier les artefacts et les mettre à jour : exemple po
 
 ## Mockito
 
+Nous avons utilisé cette librairie dans les classes "HelperTest.java" du module web-api ainsi que "DownloaderTest.java" de la classe "Util" du module "Core".
+Le mock est incontournable pour tester certaines situations. Ici, nous l'utilisons pour tester une fonction qui efface tout un dossier. Nous ne voulons pas effectivement éliminer tous les fichiers, ni en créer expressément pour cette fonction, alors nous utilisons des mocks :
 
+    @InjectMocks
+    Helper helper;
+    @Mock
+    File directory;
+    @Mock
+    File f1;
+    @Mock
+    File f2;
+    @Mock
+    File f3;
 
+    @Test
+    public void testRemoveDirectory() {
+        when(f1.exists()).thenReturn(true);
+        when(f1.delete()).thenReturn(true);
 
+        when(f2.exists()).thenReturn(true);
+        when(f2.delete()).thenReturn(true);
+
+        when(f3.exists()).thenReturn(true);
+        when(f3.delete()).thenReturn(true);
+
+        when(directory.exists()).thenReturn(true);
+        when(directory.delete()).thenReturn(true);
+
+        File[] list = {f1, f2, f3};
+
+        when(directory.isDirectory()).thenReturn(true);
+        when(directory.listFiles()).thenReturn(list);
+
+        assertTrue(removeDir(directory));
+    }
+
+Nous avons besoin de la vraie classe Helper mais allons utiliser des faux paramètres d'entrées de fonctions comme "removeDir" qui attend un paramètre File (pouvant être un dossier). En quelques lignes seulement, nous ne craignons pas avoir effacé des fichiers importants du projet.
+
+De la même manière : 
+
+    @InjectMocks
+    Downloader downloader;
+
+    @Mock
+    HttpURLConnection connection;
+
+    @Test
+    public void fetchTestNullInputStream(){
+        boolean readErrorStreamNoException = false;
+        try {
+            when(connection.getInputStream()).thenReturn(null);
+            assertThrows(IOException.class, ()-> downloader.fetch(connection, readErrorStreamNoException));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+On met en place le mock, on lui dit comment réagir face aux évènements et on vérifie que l'on a bien la réponse attendue. Ici, nous voulons tester le cas où l'utilisateur n'entre rien ou en tout cas une donnée erronée (when(connection.getInputStream()).thenReturn(null)), on s'attend alors à une exception.
+
+## Rickroll
+
+Le but de cette sous tâche est de rickroll l'utilisateur lorsqu'il "git push" et qu'au moins un test ne fonctionne pas.
+
+    - name: Build ${{ matrix.java-version }}
+        run: mvn -B clean test
+
+      - name: Rick Roll On Fail
+        if: failure()
+        run: |
+            echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
+            cat .github/workflows/rickroll.txt
+
+Donc lorsqu'un utilisateur push, une suite d'action sont effectuées, en commençant par lancer tous les tests. Au départ, nous avions mit "continue-on-error: true" car nous ne voulions pas que lorsqu'un test fail le reste des tests soient ignorés. Or cela ne change rien, alors en voici une version simplifiée.
+
+On retrouve effectivement un fichier rickroll.txt dans le dossier workflow, il s'agit d'un ASCII Art de Rick Astley. On retrouve ce portrait dans les logs des actions de Github. Le gif en revanche est affiché par URL seulement (comme ci-dessus).
