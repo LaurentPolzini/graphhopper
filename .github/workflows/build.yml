@@ -37,17 +37,6 @@ jobs:
       - name: Build ${{ matrix.java-version }}
         id: tests
         run: mvn -B clean test
-<<<<<<< HEAD
-
-      - name: Rick Roll On Fail # on veut que tous les tests s'effectuent donc continue-on-error: 
-        # mais si une erreur survient, if failure() n'est pas vrai car la tache precedente s'est finie
-        # on test plutot l'outcome
-        run: |
-            echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
-            cat .github/workflows/rickroll.txt
-
-      # build tous les modules
-=======
         continue-on-error: true
 
       - name: Rick Roll On Fail # on veut que tous les tests s'effectuent donc continue-on-error:
@@ -62,7 +51,6 @@ jobs:
 
       # Build complet du projet sans exécuter les tests
       # On compile tous les modules Maven (-DskipTests) sans lancer les tests.
->>>>>>> ed8cdfadff33eaa60730cda7d9536fea775f6e6e
       - name: build tous les modules
         run: mvn clean install -DskipTests
 
@@ -119,9 +107,9 @@ jobs:
 
 
 
-      #  Upload du nouveau score PIT pour le module core
+      # Upload du nouveau score PIT pour le module core
       # Cela permet d’utiliser ce score lors du prochain pipeline.
-      - name: 'Upload preccedent core-score'
+      - name: 'Upload precedent core-score'
         uses: actions/upload-artifact@v4
         with:
           name: core-artefact-${{ matrix.java-version }}
