@@ -35,7 +35,9 @@ jobs:
           restore-keys: |
             ${{ runner.os}}-node_modules-
       - name: Build ${{ matrix.java-version }}
+        id: tests
         run: mvn -B clean test
+<<<<<<< HEAD
 
       - name: Rick Roll On Fail # on veut que tous les tests s'effectuent donc continue-on-error: 
         # mais si une erreur survient, if failure() n'est pas vrai car la tache precedente s'est finie
@@ -45,10 +47,36 @@ jobs:
             cat .github/workflows/rickroll.txt
 
       # build tous les modules
+=======
+        continue-on-error: true
+
+      - name: Rick Roll On Fail # on veut que tous les tests s'effectuent donc continue-on-error:
+        # mais si une erreur survient, if failure() n'est pas vrai car la tache precedente s'est finie
+        # on test plutot l'outcome
+        if: steps.tests.outcome == 'failure'
+        run: |
+            echo "![RickRoll](https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif)"
+            cat .github/workflows/rickroll.txt
+          
+          
+
+      # Build complet du projet sans exécuter les tests
+      # On compile tous les modules Maven (-DskipTests) sans lancer les tests.
+>>>>>>> ed8cdfadff33eaa60730cda7d9536fea775f6e6e
       - name: build tous les modules
         run: mvn clean install -DskipTests
 
-      # telecharge core-artefact en utilisant la github action dawidd6/action-download-artifact@v11
+
+
+      # Télécharger l'ancien score de mutation du module 'core'
+      # On télécharge l'artefact du précédent pipeline afin de récupérer
+      # le score de mutation précédent (Prec_Score). Cela permet de comparer
+      # le nouveau score avec l’ancien.
+      #
+      # workflow_search: true → cherche dans les workflows précédents
+      # workflow_conclusion: success → seulement les workflows réussis
+      # continue-on-error: true → évite les erreurs lors du tout premier run,
+      # où aucun artefact n’existe encore.
       - name: Download core-artefact
         id: download-core-artifact
         uses: dawidd6/action-download-artifact@v11
@@ -59,12 +87,19 @@ jobs:
           workflow_conclusion: success
           name: core-artefact-${{ matrix.java-version }}
           path: core-artefact/
-        continue-on-error: true      # pour eviter l'erreur au premier run
+        continue-on-error: true
 
-      # workflow pour analyser le score du module core
+      # Exécuter PIT Mutation Testing sur le module 'core'
+      # On génère le rapport PIT pour le module core.
+      # On extrait le pourcentage des mutations "Killed" (score PIT).
+      # On compare le score actuel avec le score stocké dans l’artefact
+      # précédent.
+      # Si le score a baissé -> échec du workflow (exit 1).
+      #
+      # Le fichier "Prec_Score" est mis à jour.
       - name: Run pitest on core module
         run: |
-          mvn test-compile -pl core org.pitest:pitest-maven:mutationCoverage | tee core/core-score
+          mvn clean test-compile -pl core org.pitest:pitest-maven:mutationCoverage | tee core/core-score
 
           Core_Score=$(grep -A15 Statistics core/core-score | grep Killed | grep -oP '\(\K[0-9]+')
           echo "le score de mutation pour le module core est $Core_Score%" 
@@ -82,6 +117,10 @@ jobs:
           echo "ancien score: $Prev_Score%, nouveau_score: $Core_Score%"
           echo "$Core_Score" > ./Prec_Score
 
+
+
+      #  Upload du nouveau score PIT pour le module core
+      # Cela permet d’utiliser ce score lors du prochain pipeline.
       - name: 'Upload preccedent core-score'
         uses: actions/upload-artifact@v4
         with:
@@ -89,7 +128,8 @@ jobs:
           path: ./Prec_Score
 
 
-      # telecherge readergtfs-artefact
+
+      # Télécharger l’ancien score du module reader-gtfs
       - name: Download reader-artefact
         id: download-reader-artifact
         uses: dawidd6/action-download-artifact@v11
@@ -102,10 +142,12 @@ jobs:
           path: reader-artefact/
         continue-on-error: true
 
-        # workflow pour analyser le score du module reader-gtfs
+
+
+      # Exécuter PIT sur le module reader-gtfs
       - name: Run pitest on reader-gtfs module
         run: |
-          mvn test-compile -pl reader-gtfs org.pitest:pitest-maven:mutationCoverage | tee reader-gtfs/reader-score
+          mvn clean test-compile -pl reader-gtfs org.pitest:pitest-maven:mutationCoverage | tee reader-gtfs/reader-score
 
           Reader_Score=$(grep -A15 Statistics reader-gtfs/reader-score | grep Killed | grep -oP '\(\K[0-9]+')
           echo "le score de mutation pour le module reader-gtfs est $Reader_Score%"
@@ -124,6 +166,8 @@ jobs:
           echo "ancien score: $Prev_Score%, nouveau_score: $Reader_Score%"
           echo "$Reader_Score" > ./Prec_Score_gtfs
 
+
+      # Upload du nouveau score PIT reader-gtfs
       - name: 'Upload preccedent reader-score'
         uses: actions/upload-artifact@v4
         with:
